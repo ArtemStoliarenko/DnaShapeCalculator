@@ -8,10 +8,10 @@ namespace DnaShapeCalculator.Core.Entities
 {
     public class PdbRecord
     {
-        public float Resolution { get; }
+        public ExperimentType Expdata { get; }
+
+        public float? Resolution { get; }
 
         public ReadOnlyCollection<Atom> Atoms { get; }
-
-
     }
 }
