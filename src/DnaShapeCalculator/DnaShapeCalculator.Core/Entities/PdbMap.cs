@@ -9,22 +9,33 @@ namespace DnaShapeCalculator.Core.Entities
 {
     public sealed class PdbMap
     {
-        private readonly List<PdbMapRecord> records;
+        private readonly Dictionary<(string pdbCode, char pdbStrand), string> domainMap;
 
-        internal PdbMap(IEnumerable<PdbMapRecord> records)
-            : this(records.ToList())
-        {
-
-        }
+        private readonly Dictionary<(string pdbCode, char pdbStrand, int startCoordinate, int endCoordinate), string> familyMap;
 
         internal PdbMap(List<PdbMapRecord> records)
         {
-            this.records = records ?? throw new ArgumentNullException(nameof(records));
+            var domainMap = new Dictionary<(string, char), string>(records.Count);
+            var familyMap = new Dictionary<(string, char, int, int), string>(records.Count);
+
+            foreach (var record in records)
+            {
+                if (!domainMap.ContainsKey((record.PdbCode, record.Strand)))
+                {
+                    domainMap.Add((record.PdbCode, record.Strand), record.Domain);
+                }
+
+                familyMap.Add((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate), record.Family);
+            }
+
+            this.domainMap = domainMap;
+            this.familyMap = familyMap;
         }
 
-        public string GetDomain(string pdbCode, char pdbStrand) => records.FirstOrDefault(r => r.MatchPdb(pdbCode, pdbStrand))?.Domain;
+        public string GetDomain(string pdbCode, char pdbStrand) =>
+            domainMap.TryGetValue((pdbCode, pdbStrand), out var domain) ? domain : null;
 
         public string GetFamily(string pdbCode, char pdbStrand, int startCoordinate, int endCoordinate) =>
-            records.Single(r => r.MatchPdb(pdbCode, pdbStrand, startCoordinate, endCoordinate)).Family;
+            familyMap.TryGetValue((pdbCode, pdbStrand, startCoordinate, endCoordinate), out var family) ? family : null;
     }
 }
