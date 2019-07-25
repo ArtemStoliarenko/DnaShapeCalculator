@@ -48,12 +48,5 @@ namespace DnaShapeCalculator.Core.Entities
             this.StartCoordinate = startCoordinate;
             this.EndCoordinate = endCoordinate;
         }
-
-        public bool MatchPdb(string pdbCode, char pdbStrand) => (PdbCode.Equals(pdbCode, StringComparison.OrdinalIgnoreCase)) && (Strand == pdbStrand);
-
-        public bool MatchPdb(string pdbCode, char pdbStrand, int startCoordinate, int endCoordinate) => (PdbCode.Equals(pdbCode, StringComparison.OrdinalIgnoreCase)) &&
-            (Strand == pdbStrand) &&
-            (StartCoordinate == startCoordinate) &&
-            (EndCoordinate == endCoordinate);
     }
 }

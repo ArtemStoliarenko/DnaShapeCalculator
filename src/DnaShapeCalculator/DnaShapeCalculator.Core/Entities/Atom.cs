@@ -6,7 +6,7 @@ namespace DnaShapeCalculator.Core.Entities
 {
     public class Atom
     {
-        public int SerialNumber { get; }
+        public int SequenceNumber { get; }
 
         public string AtomName { get; }
 
@@ -18,11 +18,11 @@ namespace DnaShapeCalculator.Core.Entities
 
         public float CoordinateZ { get; }
 
-        internal Atom(int serialNumber, string atomName, int strandPosition, float coordinateX, float coordinateY, float coordinateZ)
+        internal Atom(int sequenceNumber, string atomName, int strandPosition, float coordinateX, float coordinateY, float coordinateZ)
         {
-            if (serialNumber < 10)
+            if (sequenceNumber < 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(serialNumber));
+                throw new ArgumentOutOfRangeException(nameof(sequenceNumber));
             }
             if (string.IsNullOrWhiteSpace(atomName))
             {
@@ -33,7 +33,7 @@ namespace DnaShapeCalculator.Core.Entities
                 throw new ArgumentOutOfRangeException(nameof(strandPosition));
             }
 
-            this.SerialNumber = serialNumber;
+            this.SequenceNumber = sequenceNumber;
             this.AtomName = atomName;
             this.StrandPosition = strandPosition;
             this.CoordinateX = coordinateX;
