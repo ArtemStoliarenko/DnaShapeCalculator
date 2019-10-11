@@ -7,6 +7,7 @@ namespace DnaShapeCalculator.Core.Entities
     public enum ExperimentType
     {
         None = 0,
-        Xray
+        Xray,
+		Nmr
     }
 }

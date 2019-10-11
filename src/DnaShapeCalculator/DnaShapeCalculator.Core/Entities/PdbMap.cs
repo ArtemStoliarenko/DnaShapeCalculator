@@ -25,7 +25,10 @@ namespace DnaShapeCalculator.Core.Entities
                     domainMap.Add((record.PdbCode, record.Strand), record.Domain);
                 }
 
-                familyMap.Add((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate), record.Family);
+				if (!familyMap.ContainsKey((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate)))
+				{
+					familyMap.Add((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate), record.Family);
+				}
             }
 
             this.domainMap = domainMap;
