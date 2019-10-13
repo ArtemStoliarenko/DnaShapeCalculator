@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DnaShapeCalculator.Core;
+using System;
+using System.IO;
 
 namespace DnaShapeCalculator
 {
@@ -6,7 +8,10 @@ namespace DnaShapeCalculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+			var file = File.ReadAllLines("pdbmap");
+			var pdbMap = PdbMapFactory.CreatePdbMap(file);
+
+			Console.WriteLine("Hello World!");
         }
     }
 }
