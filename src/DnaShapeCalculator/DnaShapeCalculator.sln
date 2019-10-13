@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnaShapeCalculator", "DnaShapeCalculator\DnaShapeCalculator.csproj", "{D092F22B-2BEF-4662-8650-92E5C11D3035}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnaShapeCalculator", "DnaShapeCalculator\DnaShapeCalculator.csproj", "{D092F22B-2BEF-4662-8650-92E5C11D3035}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnaShapeCalculator.Core", "DnaShapeCalculator.Core\DnaShapeCalculator.Core.csproj", "{403F31EF-DE3C-460D-9D2E-471AA804330E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D092F22B-2BEF-4662-8650-92E5C11D3035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D092F22B-2BEF-4662-8650-92E5C11D3035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D092F22B-2BEF-4662-8650-92E5C11D3035}.Release|Any CPU.Build.0 = Release|Any CPU
+		{403F31EF-DE3C-460D-9D2E-471AA804330E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{403F31EF-DE3C-460D-9D2E-471AA804330E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{403F31EF-DE3C-460D-9D2E-471AA804330E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{403F31EF-DE3C-460D-9D2E-471AA804330E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
