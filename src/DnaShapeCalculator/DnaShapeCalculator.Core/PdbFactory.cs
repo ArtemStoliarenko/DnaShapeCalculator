@@ -11,6 +11,7 @@ namespace DnaShapeCalculator.Core
 	{
 		private const int pdbMapRecordLength = 6;
 		private const int pdbCodeLength = 4;
+		private const int incorrectValueLength = 0;
 
 		private static readonly char[] pdbMapSeparator = { ';', ' ', '\t' };
 		private static readonly Regex pdbMapCoordinatesRegex = new Regex("[0-9]{1,3}-[0-9]{1,3}", RegexOptions.Compiled);
@@ -41,22 +42,18 @@ namespace DnaShapeCalculator.Core
 			{
 				return false;
 			}
-
 			if (pdbMapData[0].Length != pdbCodeLength)
 			{
 				return false;
 			}
-
-			if (pdbMapData[3].Length == 0)
+			if (pdbMapData[3].Length == incorrectValueLength)
 			{
 				return false;
 			}
-
-			if (pdbMapData[4].Length == 0)
+			if (pdbMapData[4].Length == incorrectValueLength)
 			{
 				return false;
 			}
-
 			if (!pdbMapCoordinatesRegex.IsMatch(pdbMapData[5]))
 			{
 				return false;

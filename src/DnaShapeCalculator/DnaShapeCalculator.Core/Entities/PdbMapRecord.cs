@@ -44,8 +44,12 @@ namespace DnaShapeCalculator.Core.Entities
             {
                 throw new ArgumentOutOfRangeException(nameof(proteinEndCoordinate));
             }
+			if (proteinStartCoordinate < proteinEndCoordinate)
+			{
+				throw new ArgumentOutOfRangeException($"{nameof(proteinStartCoordinate)} {nameof(proteinEndCoordinate)}");
+			}
 
-            this.PdbCode = pdbCode;
+			this.PdbCode = pdbCode;
             this.Strand = strand;
             this.Family = family;
             this.Domain = domain;
