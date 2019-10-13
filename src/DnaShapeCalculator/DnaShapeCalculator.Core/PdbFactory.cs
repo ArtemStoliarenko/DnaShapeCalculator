@@ -10,8 +10,10 @@ namespace DnaShapeCalculator.Core
 	public static class PdbMapFactory
 	{
 		private const int pdbMapRecordLength = 6;
+		private const int pdbCodeLength = 4;
 
 		private static readonly char[] pdbMapSeparator = { ';', ' ', '\t' };
+		private static readonly Regex pdbMapCoordinatesRegex = new Regex("[0-9]{1,3}-[0-9]{1,3}", RegexOptions.Compiled);
 
 		public static PdbMap CreatePdbMap(string[] records)
 		{
@@ -30,7 +32,7 @@ namespace DnaShapeCalculator.Core
 			}
 
 			var coordinates = pdbMapData[5].Split('-', StringSplitOptions.RemoveEmptyEntries);
-			return new PdbMapRecord(pdbMapData[0], pdbMapData[1][0], pdbMapData[3], pdbMapData[4], int.Parse(coordinates[0]), int.Parse(coordinates[1]));
+			return new PdbMapRecord(pdbMapData[0], pdbMapData[1], pdbMapData[3], pdbMapData[4], int.Parse(coordinates[0]), int.Parse(coordinates[1]));
 		}
 
 		private static bool ValidatePdbMapData(string[] pdbMapData)
@@ -40,17 +42,12 @@ namespace DnaShapeCalculator.Core
 				return false;
 			}
 
-			if (pdbMapData[0].Length != 4)
+			if (pdbMapData[0].Length != pdbCodeLength)
 			{
 				return false;
 			}
 
-			if (pdbMapData[1].Length != 1)
-			{
-				return false;
-			}
-
-			if (pdbMapData[2].Length == 0)
+			if (pdbMapData[3].Length == 0)
 			{
 				return false;
 			}
@@ -60,7 +57,7 @@ namespace DnaShapeCalculator.Core
 				return false;
 			}
 
-			if (!Regex.IsMatch(pdbMapData[5], "[0-9]+-[0-9]+"))
+			if (!pdbMapCoordinatesRegex.IsMatch(pdbMapData[5]))
 			{
 				return false;
 			}

@@ -9,14 +9,14 @@ namespace DnaShapeCalculator.Core.Entities
 {
     public sealed class PdbMap
     {
-        private readonly Dictionary<(string pdbCode, char pdbStrand), string> domainMap;
+        private readonly Dictionary<(string pdbCode, string pdbStrand), string> domainMap;
 
-        private readonly Dictionary<(string pdbCode, char pdbStrand, int startCoordinate, int endCoordinate), string> familyMap;
+        private readonly Dictionary<(string pdbCode, string pdbStrand, int startCoordinate), string> familyMap;
 
         internal PdbMap(List<PdbMapRecord> records)
         {
-            var domainMap = new Dictionary<(string, char), string>(records.Count);
-            var familyMap = new Dictionary<(string, char, int, int), string>(records.Count);
+            var domainMap = new Dictionary<(string, string), string>(records.Count);
+            var familyMap = new Dictionary<(string, string, int), string>(records.Count);
 
             foreach (var record in records)
             {
@@ -25,9 +25,9 @@ namespace DnaShapeCalculator.Core.Entities
                     domainMap.Add((record.PdbCode, record.Strand), record.Domain);
                 }
 
-				if (!familyMap.ContainsKey((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate)))
+				if (!familyMap.ContainsKey((record.PdbCode, record.Strand, record.ProteinStartCoordinate)))
 				{
-					familyMap.Add((record.PdbCode, record.Strand, record.StartCoordinate, record.EndCoordinate), record.Family);
+					familyMap.Add((record.PdbCode, record.Strand, record.ProteinStartCoordinate), record.Family);
 				}
             }
 
@@ -35,10 +35,10 @@ namespace DnaShapeCalculator.Core.Entities
             this.familyMap = familyMap;
         }
 
-        public string GetDomain(string pdbCode, char pdbStrand) =>
+        public string GetDomain(string pdbCode, string pdbStrand) =>
             domainMap.TryGetValue((pdbCode, pdbStrand), out var domain) ? domain : null;
 
-        public string GetFamily(string pdbCode, char pdbStrand, int startCoordinate, int endCoordinate) =>
-            familyMap.TryGetValue((pdbCode, pdbStrand, startCoordinate, endCoordinate), out var family) ? family : null;
+        public string GetFamily(string pdbCode, string pdbStrand, int startCoordinate, int endCoordinate) =>
+            familyMap.TryGetValue((pdbCode, pdbStrand, startCoordinate), out var family) ? family : null;
     }
 }
