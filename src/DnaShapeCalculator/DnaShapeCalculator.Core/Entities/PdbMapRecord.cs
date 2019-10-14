@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DnaShapeCalculator.Core.Entities
 {
-    sealed class PdbMapRecord
+    public sealed class PdbMapRecord
     {
         public string PdbCode { get; }
 
@@ -44,7 +44,7 @@ namespace DnaShapeCalculator.Core.Entities
             {
                 throw new ArgumentOutOfRangeException(nameof(proteinEndCoordinate));
             }
-			if (proteinStartCoordinate < proteinEndCoordinate)
+			if (proteinStartCoordinate > proteinEndCoordinate)
 			{
 				throw new ArgumentOutOfRangeException($"{nameof(proteinStartCoordinate)} {nameof(proteinEndCoordinate)}");
 			}
