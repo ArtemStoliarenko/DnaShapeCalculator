@@ -6,6 +6,8 @@ namespace DnaShapeCalculator.Core.Entities
 {
 	public interface IFamilyMappingRecord
 	{
+		string PdbCode { get; }
+
 		string Family { get; }
 	}
 }
