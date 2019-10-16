@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DnaShapeCalculator.Core.Entities
 {
-	public sealed class PdbPfamMapRecord
+	public sealed class PdbPfamMapRecord : IFamilyMappingRecord
 	{
 		public string PdbCode { get; }
 
@@ -39,9 +39,9 @@ namespace DnaShapeCalculator.Core.Entities
 				throw new ArgumentNullException(nameof(pdbEndCoordinate));
 			}
 
-			this.PdbCode = pdbCode;
-			this.Strand = strand;
-			this.Family = family;
+			this.PdbCode = pdbCode.ToUpperInvariant();
+			this.Strand = strand.ToUpperInvariant();
+			this.Family = family.ToUpperInvariant();
 			this.PdbStartCoordinate = pdbStartCoordinate;
 			this.PdbEndCoordinate = pdbEndCoordinate;
 		}

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace DnaShapeCalculator.Core
 {
-	public static class PdbDataFactory
+	public static class PdbMappingDataFactory
 	{
 		private const int pdbMapRecordLength = 6;
 		private const int pdbCodeLength = 4;

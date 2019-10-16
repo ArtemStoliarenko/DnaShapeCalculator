@@ -8,10 +8,27 @@ namespace DnaShapeCalculator.Core.Entities
 {
     public class PdbRecord
     {
-        public ExperimentType Expdata { get; }
+		public string PdbCode { get; }
+
+        public ExperimentType ExperimentType { get; }
 
         public float? Resolution { get; }
 
-        public ReadOnlyCollection<Atom> Atoms { get; }
+		public PdbRecord(string pdbCode, ExperimentType experimentType)
+			: this(pdbCode, experimentType, null)
+		{
+		}
+
+		public PdbRecord(string pdbCode, ExperimentType experimentType, float? resolution)
+		{
+			if (string.IsNullOrEmpty(pdbCode))
+			{
+				throw new ArgumentNullException(nameof(pdbCode));
+			}
+
+			this.PdbCode = pdbCode.ToUpperInvariant();
+			this.ExperimentType = experimentType;
+			this.Resolution = resolution;
+		}
     }
 }
