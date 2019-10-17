@@ -12,21 +12,21 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public string Strand { get; }
 
-		public int[] Positions { get; }
+		public string Family { get; }
 
-		public PfamFile(string fullName, string pdbCode, string strand, int[] positions)
+		public string Domain { get; }
+
+		public int ProteinStartCoordinate { get; }
+
+		public int ProteinEndCoordinate { get; }
+
+		public AtomIndex[] Positions { get; }
+
+		public PfamFile(string fullName, PdbMapRecord record, AtomIndex[] positions)
 		{
 			if (string.IsNullOrEmpty(fullName))
 			{
 				throw new ArgumentNullException(nameof(fullName));
-			}
-			if (string.IsNullOrWhiteSpace(pdbCode))
-			{
-				throw new ArgumentNullException(nameof(pdbCode));
-			}
-			if (string.IsNullOrEmpty(strand))
-			{
-				throw new ArgumentNullException(nameof(strand));
 			}
 			if (positions == null)
 			{
@@ -38,8 +38,12 @@ namespace DnaShapeCalculator.Core.Entities
 			}
 
 			this.FullName = fullName;
-			this.PdbCode = pdbCode.ToUpperInvariant();
-			this.Strand = strand.ToUpperInvariant();
+			this.PdbCode = record.PdbCode;
+			this.Strand = record.Strand;
+			this.Family = record.Family;
+			this.Domain = record.Domain;
+			this.ProteinStartCoordinate = record.ProteinStartCoordinate;
+			this.ProteinEndCoordinate = record.ProteinEndCoordinate;
 			this.Positions = positions;
 		}
 	}

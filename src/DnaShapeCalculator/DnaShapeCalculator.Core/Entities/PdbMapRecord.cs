@@ -56,12 +56,5 @@ namespace DnaShapeCalculator.Core.Entities
 			this.ProteinStartCoordinate = proteinStartCoordinate;
 			this.ProteinEndCoordinate = proteinEndCoordinate;
 		}
-
-		public bool IsMatch(string pdbCode, string strand, int startCoordinate, int endCoordinate) =>
-			this.PdbCode.Equals(pdbCode, StringComparison.OrdinalIgnoreCase) &&
-			this.Strand.Equals(strand, StringComparison.OrdinalIgnoreCase) &&
-			this.ProteinStartCoordinate == startCoordinate &&
-			this.ProteinEndCoordinate == endCoordinate;
-
 	}
 }

@@ -22,7 +22,13 @@ namespace DnaShapeCalculator
 
 			var pdbMapRecords = GetPdbMapRecords("pdbmap");
 
-			var pdbMapRecords2 = new PdbMapRecordFilter(pdbMapRecords, allowedPdbs.Result, domainCountThreshold).Filter();
+			pdbMapRecords = new PdbMapRecordFilter(pdbMapRecords, allowedPdbs.Result, domainCountThreshold).Filter();
+
+			var pfamRecords = new PfamRecordFactory(pdbMapRecords).CreatePfamFileHandles(new DirectoryInfo("pfam/").GetFiles("*.pdb"), true);
+			var test = pfamRecords.GroupBy(pf => pf.Family)
+				.Where(pf => pf.GroupBy(pf2 => pf2.Domain).Count() >= 3)
+				.SelectMany(pf => pf)
+				.ToList();
 
 			Console.WriteLine("Hello World!");
 		}
