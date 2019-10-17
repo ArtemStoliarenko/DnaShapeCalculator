@@ -33,6 +33,11 @@ namespace DnaShapeCalculator
 				.SelectMany(pf => pf)
 				.ToArray();
 
+			var pdbCodesToRun = pfamRecords
+				.GroupBy(group => group.PdbCode)
+				.Select(group => group.Key)
+				.ToArray();
+
 			Console.WriteLine("Hello World!");
 		}
 

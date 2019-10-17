@@ -6,8 +6,6 @@ namespace DnaShapeCalculator.Core.Entities
 {
 	public sealed class PfamFile
 	{
-		public string FullName { get; }
-
 		public string PdbCode { get; }
 
 		public string Strand { get; }
@@ -24,10 +22,6 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public PfamFile(string fullName, PdbMapRecord record, AtomIndex[] positions)
 		{
-			if (string.IsNullOrEmpty(fullName))
-			{
-				throw new ArgumentNullException(nameof(fullName));
-			}
 			if (positions == null)
 			{
 				throw new ArgumentNullException(nameof(positions));
@@ -37,7 +31,6 @@ namespace DnaShapeCalculator.Core.Entities
 				throw new ArgumentException(nameof(positions));
 			}
 
-			this.FullName = fullName;
 			this.PdbCode = record.PdbCode;
 			this.Strand = record.Strand;
 			this.Family = record.Family;
