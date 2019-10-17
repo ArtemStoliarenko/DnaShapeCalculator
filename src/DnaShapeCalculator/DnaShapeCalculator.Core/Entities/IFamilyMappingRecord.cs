@@ -8,6 +8,8 @@ namespace DnaShapeCalculator.Core.Entities
 	{
 		string PdbCode { get; }
 
+		string Strand { get; }
+
 		string Family { get; }
 	}
 }
