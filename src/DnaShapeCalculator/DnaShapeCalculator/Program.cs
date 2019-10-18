@@ -22,6 +22,7 @@ namespace DnaShapeCalculator
 		private const string pdbPfamMappingName = "pdb_pfam_mapping.txt";
 		private const string pdbFileMask = "*.pdb";
 		private const string pdbResultFolderName = "results_pdb";
+		private const string resultFileExtension = "*.lis";
 
 		static void Main(string[] args)
 		{
@@ -48,15 +49,28 @@ namespace DnaShapeCalculator
 			}
 
 			var results = pdbFileInfo.AsParallel()
-				.Select(pdb => new EmptyPdbFileProcessor().ProcessFile());
+				.Select(pdb => new EmptyPdbFileProcessor().ProcessFile())
+				.ToArray();
 
 			var failues = results.Count(r => !r);
+			var succeeded = results.Length - failues;
 
-			Console.WriteLine($"Dna shape extraction is complete; {failues} files unprocessed!");
+			Console.WriteLine($"Dna shape extraction is complete; {succeeded} files processed; {failues} files failed to process!");
+
+			var resultPdbCodes = GetResultPdbCodes();
+
+			var resultGroups = pfamRecords.Where(pf => resultPdbCodes.Contains(pf.PdbCode))
+				.GroupBy(pf => pf.Family)
+				.Where(group => group.GroupBy(innerGroup => innerGroup.Domain).Count() >= domainCountThreshold);
+
+			var familyCount = resultGroups.Count();
+			pfamRecords = resultGroups.SelectMany(group => group)
+			   .ToArray();
+
+			Console.WriteLine($"After running Curves+ there are {pfamRecords.Length} PFAM records and {familyCount} families!");
 
 			Console.ReadLine();
 		}
-
 
 		private static PdbMapRecord[] GetPdbMapRecords(string filename)
 		{
@@ -79,7 +93,7 @@ namespace DnaShapeCalculator
 				.Select(group => group.Key), StringComparer.OrdinalIgnoreCase);
 
 			return new DirectoryInfo("dna").GetFiles("*.pdb")
-				.Where(file => pdbCodesToRun.Contains(file.Name.Substring(3, 4)))
+				.Where(file => pdbCodesToRun.Contains(GetPdbCodeFromFileInfo(file)))
 				.ToArray();
 		}
 
@@ -91,6 +105,14 @@ namespace DnaShapeCalculator
 
 			return new HashSet<string>(records);
 		}
+
+		private static HashSet<string> GetResultPdbCodes()
+		{
+			return new HashSet<string>(new DirectoryInfo(pdbResultFolderName).GetFiles(resultFileExtension)
+				.Select(GetPdbCodeFromFileInfo));
+		}
+
+		private static string GetPdbCodeFromFileInfo(FileInfo pdbFileInfo) => pdbFileInfo.Name.Substring(3, 4).ToUpperInvariant();
 
 		private static bool IsAllowedPdbFile(PdbRecord pdbRecord)
 		{

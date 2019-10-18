@@ -16,7 +16,7 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public string PdbEndCoordinate { get; }
 
-		public PdbPfamMapRecord(string pdbCode, string strand, string family, string pdbStartCoordinate, string pdbEndCoordinate)
+		internal PdbPfamMapRecord(string pdbCode, string strand, string family, string pdbStartCoordinate, string pdbEndCoordinate)
 		{
 			if (string.IsNullOrWhiteSpace(pdbCode))
 			{

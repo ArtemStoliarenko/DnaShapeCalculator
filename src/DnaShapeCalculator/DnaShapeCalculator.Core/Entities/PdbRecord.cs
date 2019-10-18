@@ -14,12 +14,12 @@ namespace DnaShapeCalculator.Core.Entities
 
         public float? Resolution { get; }
 
-		public PdbRecord(string pdbCode, ExperimentType experimentType)
+		internal PdbRecord(string pdbCode, ExperimentType experimentType)
 			: this(pdbCode, experimentType, null)
 		{
 		}
 
-		public PdbRecord(string pdbCode, ExperimentType experimentType, float? resolution)
+		internal PdbRecord(string pdbCode, ExperimentType experimentType, float? resolution)
 		{
 			if (string.IsNullOrEmpty(pdbCode))
 			{

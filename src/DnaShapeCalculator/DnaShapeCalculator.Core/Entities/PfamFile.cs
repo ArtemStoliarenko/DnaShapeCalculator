@@ -18,15 +18,15 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public int ProteinEndCoordinate { get; }
 
-		public AtomIndex[] Positions { get; }
+		public HashSet<int> Positions { get; }
 
-		public PfamFile(string fullName, PdbMapRecord record, AtomIndex[] positions)
+		internal PfamFile(string fullName, PdbMapRecord record, HashSet<int> positions)
 		{
 			if (positions == null)
 			{
 				throw new ArgumentNullException(nameof(positions));
 			}
-			if (positions.Length == 0)
+			if (positions.Count == 0)
 			{
 				throw new ArgumentException(nameof(positions));
 			}

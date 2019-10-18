@@ -78,12 +78,10 @@ namespace DnaShapeCalculator.Core.Entities
 			}
 
 			var file = File.ReadAllLines(fileInfo.FullName);
-			var positions = file
-				.Select(GetPositionFromLine)
-				.Where(pos => pos != null)
-				.OrderBy(pos => pos.Strand)
-				.ThenBy(pos => pos.Coordinate)
-				.ToArray();
+			var positions = new HashSet<int>
+				(file.Select(GetPositionFromLine)
+				.Where(pos => pos.HasValue)
+				.Select(pos => pos.Value));
 			
 			if (!ValidatePositions(positions))
 			{
@@ -112,7 +110,7 @@ namespace DnaShapeCalculator.Core.Entities
 			return (pdbCode, strand, startCoordinate, endCoordinate);
 		}
 
-		private static AtomIndex GetPositionFromLine(string line)
+		private static int? GetPositionFromLine(string line)
 		{
 			line = line.TrimStart();
 
@@ -121,7 +119,7 @@ namespace DnaShapeCalculator.Core.Entities
 				var extracted = ExtractColumnsFromPdb(line);
 				if (phosporusName.Equals(extracted.atom, StringComparison.OrdinalIgnoreCase) && isDnaRegex.IsMatch(extracted.residue))
 				{
-					return new AtomIndex(extracted.strand, int.Parse(extracted.coordinate));
+					return int.Parse(extracted.coordinate);
 				}
 				else
 				{
@@ -134,19 +132,18 @@ namespace DnaShapeCalculator.Core.Entities
 			}
 		}
 
-		private static (string atom, string residue, string strand, string coordinate) ExtractColumnsFromPdb(string line)
+		private static (string atom, string residue, string coordinate) ExtractColumnsFromPdb(string line)
 		{
 			var atom = line.Substring(13, 4).Trim();
 			var residue = line.Substring(17, 3).Trim();
-			var strand = line.Substring(21, 2).Trim();
 			var coordinate = line.Substring(23, 3).Trim();
 
-			return (atom, residue, strand, coordinate);
+			return (atom, residue, coordinate);
 		}
 
 		private static bool ValidateFilenameValues(string pdbCode, string strand, int startCoordinate, int endCoordinate) =>
 			!string.IsNullOrEmpty(pdbCode) && !string.IsNullOrEmpty(strand) && startCoordinate >= 0 && endCoordinate >= startCoordinate;
 
-		private bool ValidatePositions(AtomIndex[] positions) => positions != null && positions.Length != 0;
+		private bool ValidatePositions(HashSet<int> positions) => positions != null && positions.Count != 0;
 	}
 }

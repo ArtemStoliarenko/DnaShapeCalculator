@@ -11,7 +11,7 @@ namespace DnaShapeCalculator.Core.Entities
     {
         private readonly Dictionary<(string pdbCode, string pdbStrand, int startCoordinate, int endCoordinate), PdbMapRecord> pdbMap;
 
-        public PdbMap(PdbMapRecord[] records)
+        internal PdbMap(PdbMapRecord[] records)
         {
             var pdbMap = new Dictionary<(string, string, int, int), PdbMapRecord>(records.Length);
 
