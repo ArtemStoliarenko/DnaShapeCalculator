@@ -9,6 +9,7 @@ namespace DnaShapeCalculator.Core.Entities
 {
 	public sealed class PfamRecordFactory
 	{
+		private const int minimumFilenameSections = 4;
 		private const int pdbCodeIndex = 0;
 		private const int strandIndex = 1;
 		private const int startCoordinateIndex = 2;
@@ -78,7 +79,7 @@ namespace DnaShapeCalculator.Core.Entities
 
 			var file = File.ReadAllLines(fileInfo.FullName);
 			var positions = file
-				.Select(pos => GetPositionFromLine(pos))
+				.Select(GetPositionFromLine)
 				.Where(pos => pos != null)
 				.OrderBy(pos => pos.Strand)
 				.ThenBy(pos => pos.Coordinate)
@@ -97,6 +98,11 @@ namespace DnaShapeCalculator.Core.Entities
 		{
 			var toParse = Path.GetFileNameWithoutExtension(name);
 			var splitted = toParse.Split(filenameSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+			if (splitted.Length < minimumFilenameSections)
+			{
+				return (null, null, 0, 0);
+			}
 
 			var pdbCode = splitted[pdbCodeIndex].ToUpperInvariant();
 			var strand = splitted[strandIndex].ToUpperInvariant();

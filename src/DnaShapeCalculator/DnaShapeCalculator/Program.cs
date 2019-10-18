@@ -26,19 +26,27 @@ namespace DnaShapeCalculator
 
 			var pfamRecords = new PfamRecordFactory(pdbMapRecords).CreatePfamFileHandles(new DirectoryInfo("pfam/").GetFiles("*.pdb"), true);
 
-			var familyGroups = pfamRecords.GroupBy(pf => pf.Family);
-			var familyGroupsCount = familyGroups.Count();
-
-			pfamRecords = familyGroups.Where(pf => pf.GroupBy(domainGroup => domainGroup.Domain).Count() >= domainCountThreshold)
+			pfamRecords = pfamRecords.GroupBy(pf => pf.Family)
+				.Where(pf => pf.GroupBy(domainGroup => domainGroup.Domain).Count() >= domainCountThreshold)
 				.SelectMany(pf => pf)
 				.ToArray();
 
-			var pdbCodesToRun = pfamRecords
-				.GroupBy(group => group.PdbCode)
-				.Select(group => group.Key)
-				.ToArray();
+			var pdbFileInfo = GetPdbFileList(pfamRecords);
 
-			Console.WriteLine("Hello World!");
+			Console.WriteLine($"PDB index built; {pdbFileInfo.Length} PDBs to process; {pfamRecords.Length} PFAM patterns.");
+
+			if (!Directory.Exists("results_pdb"))
+			{
+				Directory.CreateDirectory("results_pdb");
+			}
+
+			var results = pdbFileInfo.AsParallel()
+				.Select(pdb => new PdbFileProcessor(pdb, "results_pdb").ProcessFile());
+
+			var failues = results.Count(r => !r);
+
+			Console.WriteLine($"Dna shape extraction is complete; {failues} files unprocessed!");
+			Console.ReadLine();
 		}
 
 
@@ -54,6 +62,17 @@ namespace DnaShapeCalculator
 			var file = File.ReadAllLines(filename);
 
 			return PdbMappingDataFactory.CreatePdbPfamMapRecords(file);
+		}
+
+		private static FileInfo[] GetPdbFileList(PfamFile[] pfamRecords)
+		{
+			var pdbCodesToRun = new HashSet<string>(
+				pfamRecords.GroupBy(group => group.PdbCode)
+				.Select(group => group.Key), StringComparer.OrdinalIgnoreCase);
+
+			return new DirectoryInfo("dna").GetFiles("*.pdb")
+				.Where(file => pdbCodesToRun.Contains(file.Name.Substring(3, 4)))
+				.ToArray();
 		}
 
 		private static HashSet<string> GetAllowedPdbCodes(string directoryName)
