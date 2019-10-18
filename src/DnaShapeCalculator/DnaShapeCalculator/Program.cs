@@ -16,15 +16,22 @@ namespace DnaShapeCalculator
 
 		private const int domainCountThreshold = 3;
 
+		private const string dnaFolderName = "dna";
+		private const string pfamFolderName = "pfam/";
+		private const string pdbMapName = "pdbmap";
+		private const string pdbPfamMappingName = "pdb_pfam_mapping.txt";
+		private const string pdbFileMask = "*.pdb";
+		private const string pdbResultFolderName = "results_pdb";
+
 		static void Main(string[] args)
 		{
-			var allowedPdbs = Task.Run(() => GetAllowedPdbCodes("dna"));
+			var allowedPdbs = Task.Run(() => GetAllowedPdbCodes(dnaFolderName));
 
-			var pdbMapRecords = GetPdbMapRecords("pdbmap");
+			var pdbMapRecords = GetPdbMapRecords(pdbMapName);
 
 			pdbMapRecords = new PdbMapRecordFilter(pdbMapRecords, allowedPdbs.Result, domainCountThreshold).Filter();
 
-			var pfamRecords = new PfamRecordFactory(pdbMapRecords).CreatePfamFileHandles(new DirectoryInfo("pfam/").GetFiles("*.pdb"), true);
+			var pfamRecords = new PfamRecordFactory(pdbMapRecords).CreatePfamFileHandles(new DirectoryInfo(pfamFolderName).GetFiles(pdbFileMask), true);
 
 			pfamRecords = pfamRecords.GroupBy(pf => pf.Family)
 				.Where(pf => pf.GroupBy(domainGroup => domainGroup.Domain).Count() >= domainCountThreshold)
@@ -35,17 +42,18 @@ namespace DnaShapeCalculator
 
 			Console.WriteLine($"PDB index built; {pdbFileInfo.Length} PDBs to process; {pfamRecords.Length} PFAM patterns.");
 
-			if (!Directory.Exists("results_pdb"))
+			if (!Directory.Exists(pdbResultFolderName))
 			{
-				Directory.CreateDirectory("results_pdb");
+				Directory.CreateDirectory(pdbResultFolderName);
 			}
 
 			var results = pdbFileInfo.AsParallel()
-				.Select(pdb => new PdbFileProcessor(pdb, "results_pdb").ProcessFile());
+				.Select(pdb => new EmptyPdbFileProcessor().ProcessFile());
 
 			var failues = results.Count(r => !r);
 
 			Console.WriteLine($"Dna shape extraction is complete; {failues} files unprocessed!");
+
 			Console.ReadLine();
 		}
 

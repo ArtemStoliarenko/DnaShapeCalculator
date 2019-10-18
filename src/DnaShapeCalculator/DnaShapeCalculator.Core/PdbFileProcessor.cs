@@ -8,7 +8,7 @@ namespace DnaShapeCalculator.Core
 	using System.Diagnostics;
 	using System.IO;
 
-	public sealed class PdbFileProcessor
+	public sealed class PdbFileProcessor : IPdbFileProcessor
 	{
 		private const string findPairProcessName = "find_pair";
 		private const string findPairCurArgumentName = "-c+";
