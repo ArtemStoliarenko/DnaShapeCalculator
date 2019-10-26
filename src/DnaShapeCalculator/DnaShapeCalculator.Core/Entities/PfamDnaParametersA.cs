@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace DnaShapeCalculator.Core.Entities
@@ -16,13 +17,34 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public float? AxBend { get; }
 
-		private PfamDnaParametersA(float xdisp, float ydisp, float inclin, float tip, float? axBend)
+		internal PfamDnaParametersA(float xdisp, float ydisp, float inclin, float tip, float? axBend)
 		{
 			this.Xdisp = xdisp;
 			this.Ydisp = ydisp;
 			this.Inclin = inclin;
 			this.Tip = tip;
 			this.AxBend = axBend;
+		}
+
+		public override string ToString()
+		{
+			if (AxBend.HasValue)
+			{
+				return string.Join(';', this.Xdisp.ToString(CultureInfo.InvariantCulture),
+					this.Ydisp.ToString(CultureInfo.InvariantCulture),
+					this.Inclin.ToString(CultureInfo.InvariantCulture),
+					this.Tip.ToString(CultureInfo.InvariantCulture),
+					this.AxBend.Value.ToString(CultureInfo.InvariantCulture));
+			}
+			else
+			{
+				return string.Join(';',
+					this.Xdisp.ToString(CultureInfo.InvariantCulture), 
+					this.Ydisp.ToString(CultureInfo.InvariantCulture),
+					this.Inclin.ToString(CultureInfo.InvariantCulture), 
+					this.Tip.ToString(CultureInfo.InvariantCulture),
+					"n/a");
+			}
 		}
 
 		public static PfamDnaParametersA Parse(ReadOnlySpan<string> values)

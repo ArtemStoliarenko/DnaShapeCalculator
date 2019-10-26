@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace DnaShapeCalculator.Core.Entities
@@ -18,7 +19,7 @@ namespace DnaShapeCalculator.Core.Entities
 
 		public float Opening { get; }
 
-		private PfamDnaParametersB(float shear, float stretch, float stagger, float buckle, float propel, float opening)
+		internal PfamDnaParametersB(float shear, float stretch, float stagger, float buckle, float propel, float opening)
 		{
 			this.Shear = shear;
 			this.Stretch = stretch;
@@ -27,6 +28,14 @@ namespace DnaShapeCalculator.Core.Entities
 			this.Propel = propel;
 			this.Opening = opening;
 		}
+
+		public override string ToString() => string.Join(';',
+			this.Shear.ToString(CultureInfo.InvariantCulture),
+			this.Stretch.ToString(CultureInfo.InvariantCulture),
+			this.Stagger.ToString(CultureInfo.InvariantCulture),
+			this.Buckle.ToString(CultureInfo.InvariantCulture),
+			this.Propel.ToString(CultureInfo.InvariantCulture),
+			this.Opening.ToString(CultureInfo.InvariantCulture));
 
 		public static PfamDnaParametersB Parse(ReadOnlySpan<string> values)
 		{

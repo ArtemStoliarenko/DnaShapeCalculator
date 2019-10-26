@@ -39,5 +39,7 @@ namespace DnaShapeCalculator.Core.Entities
 			this.ProteinEndCoordinate = record.ProteinEndCoordinate;
 			this.Positions = positions;
 		}
+
+		public override string ToString() => string.Join(';', this.PdbCode, this.Strand, this.Family, this.Domain, this.ProteinStartCoordinate, this.ProteinEndCoordinate);
 	}
 }
